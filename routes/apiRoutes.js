@@ -1,6 +1,7 @@
 var db = require("../models");
 var axios = require("axios");
 const cheerio = require("cheerio");
+const mongoose = require("mongoose");
 
 module.exports = function (app) {
 
@@ -35,14 +36,11 @@ module.exports = function (app) {
     app.post("/saved", function (req, res) {
         //Create a new Article using the`result` object built from scraping
         const article = req.body;
-
         const response = {};
-
 
         db.Article.create(article)
             .then(function (dbArticle) {
                 // View the added result in the console
-                console.log(dbArticle);
                 response.success = true;
                 res.json(response);
             })
@@ -53,5 +51,15 @@ module.exports = function (app) {
                 console.log(err);
             });
     })
+
+    app.delete("/saved/:id", function (req, res) {
+        const id = req.params.id;
+
+        var response = {};
+        db.Article.deleteOne({ _id: mongoose.Types.ObjectId(id) }).then(() => {
+            response.success = true;
+            res.json(response);
+        })
+    });
 
 };

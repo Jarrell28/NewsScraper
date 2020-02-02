@@ -47,4 +47,18 @@ $(".article-list").on("click", ".btn-save", function () {
         }
 
     })
-})
+});
+
+$(".article-list").on("click", ".btn-delete", function () {
+    const id = $(this).parent().data("id");
+
+    $.ajax({
+        method: "DELETE",
+        url: "/saved/" + id,
+    }).then(response => {
+        if (response.success) {
+            $(this).parent().parent().parent().remove();
+        }
+
+    })
+});

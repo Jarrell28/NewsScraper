@@ -2,8 +2,58 @@
     <div class="container">
         <h2 class="text-white my-3 text-center h1">Saved Articles</h2>
         <ul class="article-list list-group p-0">
-            <li class="h2 list-group-item bg-transparent text-white border-0">Click the Scrape News button to get
-                articles!</li>
+            {{#if articles}}
+            {{#each articles}}
+            <li class='list-group-item bg-transparent border-0 p-0 mb-5'>
+                <div class='d-flex justify-content-between align-items-center bg-danger px-2'>
+                    <h3 class='text-white py-3  m-0 h4'>{{this.title}}</h3>
+                    <div data-id={{this._id}}>
+                        <button class='btn btn-outline-light btn-sm btn-article'>Article Notes</button>
+                        <button class='btn btn-outline-light btn-sm btn-delete'>Delete Article</button>
+                    </div>
+                </div>
+                <p class='bg-white m-0 py-3 px-2'>{{this.description}}</p>
+            </li>
+            {{/each}}
+
+            {{else}}
+            <li class="h2 list-group-item bg-transparent text-white border-0">You have no saved articles!</li>
+            {{/if}}
+
         </ul>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary d-none" id="btn-view" data-toggle="modal" data-target="#modal-article">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="modal-article" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li class="list-group-item text-center">No Notes for this Article</li>
+                </ul>
+
+                <form action="" id="noteForm">
+                    <div class="form-group">
+                        <input type="text" name="articleNote" placeholder="Enter Note" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
     </div>
 </div>
