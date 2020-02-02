@@ -71,6 +71,18 @@ module.exports = function (app) {
             response.data = data;
             res.json(response);
         });
+    });
+
+    app.put("/saved/:id", function (req, res) {
+        const id = req.params.id;
+        const newNote = req.body.newNote;
+
+        db.Article.updateOne(
+            { _id: mongoose.Types.ObjectId(id) },
+            { $push: { notes: newNote } }
+        ).then(data => {
+            console.log(data);
+        })
     })
 
 };

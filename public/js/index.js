@@ -34,7 +34,7 @@ $(".article-list").on("click", ".btn-save", function () {
     const article = {};
     article.title = $(this).prev().text();
     article.description = $(this).parent().next().text();
-    article.note = "";
+    article.notes = [];
 
     $.ajax({
         method: "POST",
@@ -74,10 +74,40 @@ $(".article-list").on("click", ".btn-article", function () {
         if (response.success) {
             const data = response.data;
 
+            $("#noteForm").attr("data-id", data._id);
             $("#modal-article .modal-title").text(data.title);
+            if (data.notes.length) {
+                $("#noteList").empty();
+
+                data.notes.forEach(note => {
+                    const noteHtml = `<li class="list-group-item">${note}</li>`
+                    $("#noteList").append(noteHtml);
+                })
+            } else {
+                $("#noteList").html('<li class="list-group-item text-center">No Notes for this Article</li>');
+            }
+
 
             $("#btn-view").trigger("click");
         }
 
     })
+});
+
+$("#noteForm").on("submit", function (e) {
+    e.preventDefault();
+
+    const newNote = $("#articleNote").val();
+    const id = $(this).data("id");
+
+    if (newNote) {
+        $.ajax({
+            method: "PUT",
+            url: "/saved/" + id,
+            data: { newNote }
+        }).then(response => {
+            $("#articleNote").val("");
+            console.log(response);
+        })
+    }
 });
