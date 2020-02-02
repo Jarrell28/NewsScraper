@@ -70,7 +70,6 @@ $(".article-list").on("click", ".btn-article", function () {
         method: "GET",
         url: "/saved/" + id,
     }).then(response => {
-        console.log(response);
         if (response.success) {
             const data = response.data;
 
@@ -80,7 +79,10 @@ $(".article-list").on("click", ".btn-article", function () {
                 $("#noteList").empty();
 
                 data.notes.forEach(note => {
-                    const noteHtml = `<li class="list-group-item">${note}</li>`
+                    const noteHtml = `
+                    <li class="list-group-item d-flex justify-content-between">${note.note} 
+                    <button class='btn btn-sm btn-danger btn-delete-note' data-id=${note._id}>X</button>
+                    </li>`
                     $("#noteList").append(noteHtml);
                 })
             } else {
@@ -106,8 +108,33 @@ $("#noteForm").on("submit", function (e) {
             url: "/saved/" + id,
             data: { newNote }
         }).then(response => {
-            $("#articleNote").val("");
-            console.log(response);
+
+            if (response.success) {
+                $("#articleNote").val("");
+
+                $("#noteList").empty();
+
+                response.data.notes.forEach(note => {
+                    const noteHtml = `
+                    <li class="list-group-item d-flex justify-content-between">${note.note} 
+                    <button class='btn btn-sm btn-danger btn-delete-note' data-id=${note._id}>X</button>
+                    </li>`
+                    $("#noteList").append(noteHtml);
+                })
+            }
         })
     }
 });
+
+$("#noteList").on("click", ".btn-delete-note", function () {
+    const id = $(this).data("id");
+
+    $.ajax({
+        method: "DELETE",
+        url: "/saved/delete-note/" + id
+    }).then(response => {
+        if (response.success) {
+            $(this).parent().remove();
+        }
+    })
+})

@@ -66,7 +66,7 @@ module.exports = function (app) {
         const id = req.params.id;
 
         var response = {};
-        db.Article.findOne({ _id: mongoose.Types.ObjectId(id) }).then(data => {
+        db.Article.findOne({ _id: mongoose.Types.ObjectId(id) }).populate("notes").then(data => {
             response.success = true;
             response.data = data;
             res.json(response);
@@ -77,11 +77,25 @@ module.exports = function (app) {
         const id = req.params.id;
         const newNote = req.body.newNote;
 
-        db.Article.updateOne(
-            { _id: mongoose.Types.ObjectId(id) },
-            { $push: { notes: newNote } }
-        ).then(data => {
-            console.log(data);
+        var response = {};
+        db.Note.create({ note: newNote }).then(dbNote => {
+            return db.Article.findOneAndUpdate({}, { $push: { notes: dbNote._id } }, { new: true }).populate("notes");
+        }).then(data => {
+            response.success = true;
+            response.data = data;
+            res.json(response);
+        })
+    })
+
+    app.delete("/saved/delete-note/:id", function (req, res) {
+        const id = req.params.id;
+
+        var response = {};
+        db.Note.deleteOne({ _id: mongoose.Types.ObjectId(id) }).then(() => {
+            return db.Article.findOneAndUpdate({}, { $pull: { notes: mongoose.Types.ObjectId(id) } })
+        }).then(() => {
+            response.success = true;
+            res.json(response);
         })
     })
 
