@@ -81,5 +81,3 @@ $(".article-list").on("click", ".btn-article", function () {
 
     })
 });
-
-alert("hi")
