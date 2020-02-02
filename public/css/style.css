@@ -1,3 +1,7 @@
+html, body {
+    min-height: 100vh;
+}
+
 #main-container {
     height: 500px;
     overflow: hidden;
