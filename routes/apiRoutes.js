@@ -62,4 +62,15 @@ module.exports = function (app) {
         })
     });
 
+    app.get("/saved/:id", function (req, res) {
+        const id = req.params.id;
+
+        var response = {};
+        db.Article.findOne({ _id: mongoose.Types.ObjectId(id) }).then(data => {
+            response.success = true;
+            response.data = data;
+            res.json(response);
+        });
+    })
+
 };

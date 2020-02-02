@@ -62,3 +62,24 @@ $(".article-list").on("click", ".btn-delete", function () {
 
     })
 });
+
+$(".article-list").on("click", ".btn-article", function () {
+    const id = $(this).parent().data("id");
+
+    $.ajax({
+        method: "GET",
+        url: "/saved/" + id,
+    }).then(response => {
+        console.log(response);
+        if (response.success) {
+            const data = response.data;
+
+            $("#modal-article .modal-title").text(data.title);
+
+            $("#btn-view").trigger("click");
+        }
+
+    })
+});
+
+alert("hi")
