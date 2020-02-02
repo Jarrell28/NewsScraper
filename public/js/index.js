@@ -12,12 +12,39 @@ $("#btn-scraper").on("click", () => {
 
         result.forEach(item => {
             const listItem = `
-            <li class='list-group-item bg-transparent border-none p-0 mb-5'>
-            <h3 class='bg-danger text-white py-3 px-2 m-0'>${item.title}</h3>
-            <p class='bg-white m-0 py-2 px-2'>${item.description}</p>
+            <li class='list-group-item bg-transparent border-0 p-0 mb-5'>
+            <div class='d-flex justify-content-between align-items-center bg-danger px-2'>
+            <h3 class='text-white py-3  m-0 h4'>${item.title}</h3>
+            <button class='btn btn-outline-light btn-save'>Save Article</button>
+            </div>
+            <p class='bg-white m-0 py-3 px-2'>${item.description}</p>
             </li>`;
 
             ul.append(listItem);
-        })
+        });
+
+        $("#popup .modal-body").html(`<h4 class='text-center py-3'>Scraped ${result.length} articles!</h4>`);
+        $("#popup-btn").trigger("click");
+
+    })
+})
+
+//Save Article Event Listener
+$(".article-list").on("click", ".btn-save", function () {
+    const article = {};
+    article.title = $(this).prev().text();
+    article.description = $(this).parent().next().text();
+    article.note = "";
+
+    $.ajax({
+        method: "POST",
+        url: "/saved",
+        data: article
+    }).then(response => {
+        if (response.success) {
+            $("#popup .modal-body").html(`<h4 class='text-center py-3'>Saved Article!</h4>`);
+            $("#popup-btn").trigger("click");
+        }
+
     })
 })

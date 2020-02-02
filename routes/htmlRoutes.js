@@ -9,7 +9,11 @@ module.exports = function (app) {
     });
 
     app.get("/saved", function (req, res) {
-        res.render("saved");
+        db.Article.find().then(data => {
+            res.render("saved", {
+                articles: data
+            });
+        })
     })
 
 };
