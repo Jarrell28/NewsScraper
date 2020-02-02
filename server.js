@@ -22,7 +22,7 @@ require("./routes/htmlRoutes")(app);
 
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/newsScraper", { useNewUrlParser: true });
-
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsScraper";
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 app.listen(PORT, () => console.log("App Listening on port " + PORT));
