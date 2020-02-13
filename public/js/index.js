@@ -14,7 +14,7 @@ $("#btn-scraper").on("click", () => {
             const listItem = `
             <li class='list-group-item bg-transparent border-0 p-0 mb-5'>
             <div class='d-flex justify-content-between align-items-center bg-danger px-2'>
-            <h3 class='text-white py-3  m-0 h4'>${item.title}</h3>
+            <h3 class='text-white py-3  m-0 h4'><a href="${item.link}" class="text-white" style="text-decoration: underline" target="_blank">${item.title}</a></h3>
             <button class='btn btn-outline-light btn-save'>Save Article</button>
             </div>
             <p class='bg-white m-0 py-3 px-2'>${item.description}</p>
@@ -34,6 +34,8 @@ $(".article-list").on("click", ".btn-save", function () {
     const article = {};
     article.title = $(this).prev().text();
     article.description = $(this).parent().next().text();
+    article.link = $(this).prev().find("a").attr("href");
+    console.log(article.link);
     article.notes = [];
 
     $.ajax({

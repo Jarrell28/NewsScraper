@@ -14,6 +14,9 @@ var ArticleSchema = new Schema({
   description: {
     type: String,
   },
+  link: {
+    type: String,
+  },
   notes: [
     {
       type: Schema.Types.ObjectId,
